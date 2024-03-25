@@ -1,6 +1,6 @@
 export default function ConnectWithSpotify() {
-  const client_id = "b6b24206aae34ef488bb7833fa7e718f"; // This should be an environment variable
-  const redirect_uri = "http://localhost:3000/callback";
+  const client_id = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
+  const redirect_uri = process.env.REDIRECT_URI;
   const scope = encodeURIComponent(
     "playlist-modify-public playlist-modify-private"
   );
