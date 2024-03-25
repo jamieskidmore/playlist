@@ -216,7 +216,7 @@ export default function CreateSpotifyPlaylist({
 
   return message == "" ? (
     <>
-      <p>Enter something...</p>
+      <p>Enter an Apple Music playlist link below</p>
       <form onSubmit={async (e) => await getPlaylistFromApple(e)}>
         <input
           type="text"
