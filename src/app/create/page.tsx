@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 import CreateAppleMusicPlaylist from "@/components/create-apple-playlist";
 import CreateSpotifyPlaylist from "@/components/create-spotify-playlist";
 
-export default async function Callback({
+export default async function Create({
   searchParams,
 }: {
   searchParams: { [key: string]: string | undefined };
