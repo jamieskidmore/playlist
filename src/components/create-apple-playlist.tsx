@@ -49,6 +49,7 @@ export default function CreateApplePlaylist({
 
   const getPlaylistFromSpotify = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("token" + spotifyAccessToken);
     const url = formatSpotifyUrlForApi(inputValue);
     if (url) {
       try {
@@ -91,7 +92,7 @@ export default function CreateApplePlaylist({
   ) : (
     <>
       <div>
-        <p>Enter an Apple Music playlist link below</p>
+        <p>Enter a Spotify playlist link below</p>
         <form onSubmit={async (e) => await getPlaylistFromSpotify(e)}>
           <input
             type="text"
