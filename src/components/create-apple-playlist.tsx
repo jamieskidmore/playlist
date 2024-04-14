@@ -58,6 +58,8 @@ export default function CreateApplePlaylist({
         });
         const playlistData = await playlistResponse.json();
         console.log(playlistData);
+        console.log(playlistData.tracks);
+        console.log(playlistData[0].tracks);
         // const tracks = playlistData.data[0].relationships.tracks.data.map(
         //   (track: {
         //     attributes: { name: string; artistName: string; albumName: string };
