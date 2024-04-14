@@ -1,0 +1,28 @@
+"use client";
+
+import CreateApplePlaylist from "./create-apple-playlist";
+import CreateSpotifyPlaylist from "./create-spotify-playlist";
+
+export default function CreatePlaylist({
+  spotifyAccessToken,
+  appleDeveloperToken,
+}: {
+  spotifyAccessToken: string;
+  appleDeveloperToken: string;
+}) {
+  if (localStorage.getItem("choice") == "Spotify") {
+    return (
+      <CreateSpotifyPlaylist
+        spotifyAccessToken={spotifyAccessToken}
+        appleDeveloperToken={appleDeveloperToken}
+      />
+    );
+  } else if (localStorage.getItem("choice") == "Apple") {
+    return (
+      <CreateApplePlaylist
+        appleDeveloperToken={appleDeveloperToken}
+        spotifyAccessToken={spotifyAccessToken}
+      />
+    );
+  }
+}

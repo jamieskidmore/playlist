@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 import CreateApplePlaylist from "@/components/create-apple-playlist";
+import CreatePlaylistButton from "@/components/create-playlist";
 import CreateSpotifyPlaylist from "@/components/create-spotify-playlist";
 
 export default async function Create({
@@ -81,19 +82,10 @@ export default async function Create({
 
   handleConnectWithApple();
 
-  if (searchParams.code) {
-    return (
-      <CreateSpotifyPlaylist
-        spotifyAccessToken={spotifyAccessToken}
-        appleDeveloperToken={appleDeveloperToken}
-      />
-    );
-  } else {
-    return (
-      <CreateApplePlaylist
-        appleDeveloperToken={appleDeveloperToken}
-        spotifyAccessToken={spotifyAccessToken}
-      />
-    );
-  }
+  return (
+    <CreatePlaylistButton
+      spotifyAccessToken={spotifyAccessToken}
+      appleDeveloperToken={appleDeveloperToken}
+    />
+  );
 }
