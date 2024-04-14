@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 import CreateApplePlaylist from "@/components/create-apple-playlist";
+import CreatePlaylist from "@/components/create-playlist";
 import CreateSpotifyPlaylist from "@/components/create-spotify-playlist";
 
 export default async function Create({
