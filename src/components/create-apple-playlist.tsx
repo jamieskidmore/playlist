@@ -57,7 +57,7 @@ export default function CreateApplePlaylist({
           headers: { Authorization: `Bearer ${spotifyAccessToken}` },
         });
         const playlistData = await playlistResponse.json();
-        console.log(playlistData);
+        console.log(playlistData.tracks[0]);
         // const tracks = playlistData.data[0].relationships.tracks.data.map(
         //   (track: {
         //     attributes: { name: string; artistName: string; albumName: string };
@@ -91,7 +91,7 @@ export default function CreateApplePlaylist({
   ) : (
     <>
       <div>
-        <p>Enter an Apple Music playlist link below</p>
+        <p>Enter an Spotify playlist link below</p>
         <form onSubmit={async (e) => await getPlaylistFromSpotify(e)}>
           <input
             type="text"

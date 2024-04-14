@@ -14,16 +14,18 @@ export default function CreatePlaylist({
   const [showApple, setShowApple] = useState(false);
   return (
     <>
-      <CreateSpotifyPlaylist
-        spotifyAccessToken={spotifyAccessToken}
-        appleDeveloperToken={appleDeveloperToken}
-      />
+      {!showApple && (
+        <CreateSpotifyPlaylist
+          spotifyAccessToken={spotifyAccessToken}
+          appleDeveloperToken={appleDeveloperToken}
+        />
+      )}
       <button
         onClick={() => {
-          setShowApple(true);
+          setShowApple(!showApple);
         }}
       >
-        Apple
+        {showApple ? "Spotify" : "Apple"}
       </button>
 
       {showApple && (
