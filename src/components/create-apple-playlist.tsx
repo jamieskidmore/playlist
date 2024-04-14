@@ -74,7 +74,7 @@ export default function CreateApplePlaylist({
           }) => {
             return {
               name: track.name,
-              artist: track.artists[0],
+              artist: track.artists[0].name,
               album: track.album.name,
             };
           }
