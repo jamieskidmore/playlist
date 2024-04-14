@@ -45,7 +45,54 @@ export default function CreateSpotifyPlaylist({
     }
   };
 
-  const formatAppleUrlForApi = (appleMusicUrl: string): string | null => {
+  useEffect(() => {
+    const createSpotifyPlaylist = async () => {
+      setMessage("Connecting to Spotify");
+      try {
+        const currentSpotifyUserId = await getCurrentSpotifyUserId();
+
+        if (!currentSpotifyUserId) {
+          setMessage("Failed to get Spotify user ID");
+          return;
+        }
+
+        setMessage(`Creating playlist for ${currentSpotifyUserId}`);
+
+        const playlistResponse = await fetch(
+          `https://api.spotify.com/v1/users/${currentSpotifyUserId}/playlists`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${spotifyAccessToken}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              name: newPlaylistName,
+              description: newPlaylistDescription,
+              public: true,
+            }),
+          }
+        );
+
+        const playlistData = await playlistResponse.json();
+        await handleCreateSpotifyPlaylist(playlistData.id);
+        setNewPlaylistUrl(
+          `https://open.spotify.com/playlist/${playlistData.id}`
+        );
+        setMessage("Playlist created.");
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+
+    if (applePlaylistTracks !== null) {
+      createSpotifyPlaylist();
+    }
+  }, [applePlaylistTracks]);
+
+  const convertAppleMusicUrlToApiUrl = (
+    appleMusicUrl: string
+  ): string | null => {
     const playlistUrl = appleMusicUrl.split("/");
     if (playlistUrl.length == 6) {
       return `https://api.music.apple.com/v1/catalog/${playlistUrl[3]}/playlists/${playlistUrl[5]}`;
@@ -57,7 +104,7 @@ export default function CreateSpotifyPlaylist({
   const getPlaylistFromApple = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const url = formatAppleUrlForApi(inputValue);
+    const url = convertAppleMusicUrlToApiUrl(inputValue);
     if (url) {
       try {
         const playlistResponse = await fetch(url, {
@@ -166,51 +213,6 @@ export default function CreateSpotifyPlaylist({
       console.log("error adding song", error);
     }
   };
-
-  useEffect(() => {
-    const createSpotifyPlaylist = async () => {
-      setMessage("Connecting to Spotify");
-      try {
-        const currentSpotifyUserId = await getCurrentSpotifyUserId();
-
-        if (!currentSpotifyUserId) {
-          setMessage("Failed to get Spotify user ID");
-          return;
-        }
-
-        setMessage(`Creating playlist for ${currentSpotifyUserId}`);
-
-        const playlistResponse = await fetch(
-          `https://api.spotify.com/v1/users/${currentSpotifyUserId}/playlists`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${spotifyAccessToken}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              name: newPlaylistName,
-              description: newPlaylistDescription,
-              public: true,
-            }),
-          }
-        );
-
-        const playlistData = await playlistResponse.json();
-        await handleCreateSpotifyPlaylist(playlistData.id);
-        setNewPlaylistUrl(
-          `https://open.spotify.com/playlist/${playlistData.id}`
-        );
-        setMessage("Playlist created.");
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-
-    if (applePlaylistTracks !== null) {
-      createSpotifyPlaylist();
-    }
-  }, [applePlaylistTracks]);
 
   return message == "" ? (
     <>
