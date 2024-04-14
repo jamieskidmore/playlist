@@ -1,17 +1,9 @@
-import ConnectToApiButton from "./connect-to-api-button";
-
-const client_id = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
-const redirect_uri = process.env.REDIRECT_URI;
-const scope = encodeURIComponent(
-  "playlist-modify-public playlist-modify-private"
-);
+import Link from "next/link";
 
 export default function ConnectWithApple() {
   return (
-    <a
-      href={`https://accounts.spotify.com/authorize?response_type=code&client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}`}
-    >
-      <ConnectToApiButton service="Apple" />
-    </a>
+    <Link href="/create">
+      <button>Connect with Apple Music</button>
+    </Link>
   );
 }

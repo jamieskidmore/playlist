@@ -12,18 +12,18 @@ const songs = [{ track: "Back to Black", artist: "Amy Winehouse" }];
 
 export default function CreateApplePlaylist({
   appleDeveloperToken,
+  spotifyAccessToken,
 }: {
   appleDeveloperToken: string;
+  spotifyAccessToken: string;
 }) {
   const [inputValue, setInputValue] = useState("");
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    console.log(appleDeveloperToken);
     localStorage.clear();
     const handleConnectWithApple = async () => {
       if (window.MusicKit) {
-        console.log("in");
         try {
           const music = window.MusicKit.configure({
             developerToken: appleDeveloperToken,
@@ -31,7 +31,6 @@ export default function CreateApplePlaylist({
               name: "playlist-hosted",
             },
           });
-          console.log(appleDeveloperToken);
 
           const appleUserToken = await music.authorize();
           localStorage.setItem("appleUserToken", appleUserToken);
@@ -44,42 +43,41 @@ export default function CreateApplePlaylist({
     };
 
     if (!localStorage.getItem("appleUserToken")) {
-      console.log(window.MusicKit);
       handleConnectWithApple();
     }
   }, [appleDeveloperToken]);
 
-  // const getPlaylistFromSpotify = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   const url = formatSpotifyUrlForApi(inputValue);
-  //   if (url) {
-  //     try {
-  //       const playlistResponse = await fetch(url, {
-  //         method: "GET",
-  //         headers: { Authorization: `Bearer ${spotifyAccessToken}` },
-  //       });
-  //       const playlistData = await playlistResponse.json();
-  //       console.log(playlistData);
-  //       // const tracks = playlistData.data[0].relationships.tracks.data.map(
-  //       //   (track: {
-  //       //     attributes: { name: string; artistName: string; albumName: string };
-  //       //   }) => {
-  //       //     return {
-  //       //       name: track.attributes.name,
-  //       //       artist: track.attributes.artistName,
-  //       //       album: track.attributes.albumName,
-  //       //     };
-  //       //   }
-  //       // );
-  //       // setApplePlaylistTracks(tracks);
-  //       // setNewPlaylistArtwork(playlistData.data[0].attributes.artwork);
-  //       // setNewPlaylistName(playlistData.data[0].attributes.name);
-  //       // setNewPlaylistDescription(playlistData.data[0].attributes.description);
-  //     } catch (error) {
-  //       console.log("error", error);
-  //     }
-  //   }
-  // };
+  const getPlaylistFromSpotify = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const url = formatSpotifyUrlForApi(inputValue);
+    if (url) {
+      try {
+        const playlistResponse = await fetch(url, {
+          method: "GET",
+          headers: { Authorization: `Bearer ${spotifyAccessToken}` },
+        });
+        const playlistData = await playlistResponse.json();
+        console.log(playlistData);
+        // const tracks = playlistData.data[0].relationships.tracks.data.map(
+        //   (track: {
+        //     attributes: { name: string; artistName: string; albumName: string };
+        //   }) => {
+        //     return {
+        //       name: track.attributes.name,
+        //       artist: track.attributes.artistName,
+        //       album: track.attributes.albumName,
+        //     };
+        //   }
+        // );
+        // setApplePlaylistTracks(tracks);
+        // setNewPlaylistArtwork(playlistData.data[0].attributes.artwork);
+        // setNewPlaylistName(playlistData.data[0].attributes.name);
+        // setNewPlaylistDescription(playlistData.data[0].attributes.description);
+      } catch (error) {
+        console.log("error", error);
+      }
+    }
+  };
 
   const formatSpotifyUrlForApi = (spotifyUrl: string): string | null => {
     const playlistUrl = spotifyUrl.split("/");
@@ -94,7 +92,7 @@ export default function CreateApplePlaylist({
     <>
       <div>
         <p>Enter an Apple Music playlist link below</p>
-        <form>
+        <form onSubmit={async (e) => await getPlaylistFromSpotify(e)}>
           <input
             type="text"
             className="text-black"
