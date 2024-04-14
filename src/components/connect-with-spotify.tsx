@@ -9,7 +9,13 @@ export default function ConnectWithSpotify() {
     <a
       href={`https://accounts.spotify.com/authorize?response_type=code&client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}`}
     >
-      <button>Connect with Spotify!</button>
+      <button
+        onClick={() => {
+          localStorage.setItem("choice", "Spotify");
+        }}
+      >
+        Connect with Spotify!
+      </button>
     </a>
   );
 }
