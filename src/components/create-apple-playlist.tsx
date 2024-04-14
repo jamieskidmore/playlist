@@ -64,19 +64,22 @@ export default function CreateApplePlaylist({
         console.log(3);
         console.log(playlistData.tracks.items[0].track.artists);
         console.log(4);
-        console.log(playlistData.tracks.items[0].track.artists[0]);
+        console.log(playlistData.tracks.items[0].track.artists[0].name);
 
-        // const tracks = playlistData.data[0].relationships.tracks.data.map(
-        //   (track: {
-        //     attributes: { name: string; artistName: string; albumName: string };
-        //   }) => {
-        //     return {
-        //       name: track.attributes.name,
-        //       artist: track.attributes.artistName,
-        //       album: track.attributes.albumName,
-        //     };
-        //   }
-        // );
+        const tracks = playlistData.tracks.items.map(
+          (track: {
+            name: string;
+            artists: { name: string }[];
+            album: { name: string };
+          }) => {
+            return {
+              name: track.name,
+              artist: track.artists[0],
+              album: track.album.name,
+            };
+          }
+        );
+        console.log(tracks);
         // setApplePlaylistTracks(tracks);
         // setNewPlaylistArtwork(playlistData.data[0].attributes.artwork);
         // setNewPlaylistName(playlistData.data[0].attributes.name);
