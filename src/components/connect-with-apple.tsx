@@ -5,8 +5,8 @@ import ConnectToApiButton from "./connect-to-api-button";
 
 export default function ConnectWithApple() {
   return (
-    <Link href="{`https://accounts.spotify.com/authorize?response_type=code&client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}`}">
+    <a href="{`https://accounts.spotify.com/authorize?response_type=code&client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}`}">
       <ConnectToApiButton service="Apple" />
-    </Link>
+    </a>
   );
 }
