@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GetAppleUserToken from "./get-apple-user-token";
 
 const songs = [{ track: "Back to Black", artist: "Amy Winehouse" }];
@@ -15,6 +15,33 @@ export default function CreateAppleMusicPlaylist({
     e.preventDefault();
     console.log(localStorage.getItem("appleUserToken"));
   };
+
+  useEffect(() => {
+    const handleConnectWithApple = async () => {
+      if (window.MusicKit) {
+        try {
+          const music = window.MusicKit.configure({
+            developerToken: appleDeveloperToken,
+            app: {
+              name: "playlist-hosted",
+            },
+          });
+
+          const appleUserToken = await music.authorize();
+          localStorage.setItem("appleUserToken", appleUserToken);
+          setMessage("User connected with apple!");
+        } catch (error) {
+          setMessage("MusicKit Authorization Failed.");
+          console.error("MusicKit Authorization Failed:", error);
+        }
+      }
+    };
+
+    if (!localStorage.getItem("appleUserToken")) {
+      handleConnectWithApple();
+    }
+  }, [appleDeveloperToken]);
+
   //   const [songsNotFound, setSongsNotFound] = useState([""]);
 
   //   const getCurrentSpotifyUserId = async () => {
