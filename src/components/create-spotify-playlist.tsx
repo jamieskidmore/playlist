@@ -45,9 +45,7 @@ export default function CreateSpotifyPlaylist({
     }
   };
 
-  const convertAppleMusicUrlToApiUrl = (
-    appleMusicUrl: string
-  ): string | null => {
+  const formatAppleUrlForApi = (appleMusicUrl: string): string | null => {
     const playlistUrl = appleMusicUrl.split("/");
     if (playlistUrl.length == 6) {
       return `https://api.music.apple.com/v1/catalog/${playlistUrl[3]}/playlists/${playlistUrl[5]}`;
@@ -59,7 +57,7 @@ export default function CreateSpotifyPlaylist({
   const getPlaylistFromApple = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const url = convertAppleMusicUrlToApiUrl(inputValue);
+    const url = formatAppleUrlForApi(inputValue);
     if (url) {
       try {
         const playlistResponse = await fetch(url, {

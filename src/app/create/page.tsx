@@ -1,5 +1,4 @@
 "use client";
-
 const jwt = require("jsonwebtoken");
 
 import CreateApplePlaylist from "@/components/create-apple-playlist";
@@ -10,11 +9,14 @@ export default async function Create({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) {
-  const client_id = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
-  const redirect_uri = process.env.REDIRECT_URI;
-  const scope = encodeURIComponent(
-    "playlist-modify-public playlist-modify-private"
-  );
+  if (searchParams === undefined) {
+    const client_id = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
+    const redirect_uri = process.env.REDIRECT_URI;
+    const scope = encodeURIComponent(
+      "playlist-modify-public playlist-modify-private"
+    );
+    window.location.href = `https://accounts.spotify.com/authorize?response_type=code&client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}`;
+  }
   let spotifyAccessToken = "";
   let appleDeveloperToken = "";
 
@@ -44,7 +46,9 @@ export default async function Create({
   };
 
   const getSpotifyAccessToken = async (code: string) => {
+    const client_id = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
     const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
+    const redirect_uri = process.env.REDIRECT_URI;
 
     if (redirect_uri) {
       const authHeader =
@@ -78,31 +82,27 @@ export default async function Create({
     }
   };
 
-  if (!searchParams) {
-    window.location.href = `https://accounts.spotify.com/authorize?response_type=code&client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}`;
-  }
-
-  if (searchParams.code) {
-    spotifyAccessToken = await getSpotifyAccessToken(searchParams.code);
+  if (searchParams) {
+    if (searchParams.code) {
+      spotifyAccessToken = await getSpotifyAccessToken(searchParams.code);
+    }
   }
 
   handleConnectWithApple();
 
-  if (localStorage.getItem("choice") == "Spotify") {
+  if (searchParams.code) {
     return (
       <CreateSpotifyPlaylist
         spotifyAccessToken={spotifyAccessToken}
         appleDeveloperToken={appleDeveloperToken}
       />
     );
-  } else if (localStorage.getItem("choice") == "Apple") {
+  } else {
     return (
       <CreateApplePlaylist
         appleDeveloperToken={appleDeveloperToken}
         spotifyAccessToken={spotifyAccessToken}
       />
     );
-  } else {
-    return <p>Something went wrong.</p>;
   }
 }
