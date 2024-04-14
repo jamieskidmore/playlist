@@ -1,3 +1,5 @@
+"use client";
+
 const jwt = require("jsonwebtoken");
 
 import CreateApplePlaylist from "@/components/create-apple-playlist";
