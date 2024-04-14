@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import CreateApplePlaylist from "./create-apple-playlist";
 import CreateSpotifyPlaylist from "./create-spotify-playlist";
 
@@ -10,19 +11,27 @@ export default function CreatePlaylist({
   spotifyAccessToken: string;
   appleDeveloperToken: string;
 }) {
-  if (localStorage.getItem("choice") == "Spotify") {
-    return (
+  const [showApple, setShowApple] = useState(false);
+  return (
+    <>
       <CreateSpotifyPlaylist
         spotifyAccessToken={spotifyAccessToken}
         appleDeveloperToken={appleDeveloperToken}
       />
-    );
-  } else if (localStorage.getItem("choice") == "Apple") {
-    return (
-      <CreateApplePlaylist
-        appleDeveloperToken={appleDeveloperToken}
-        spotifyAccessToken={spotifyAccessToken}
-      />
-    );
-  }
+      <button
+        onClick={() => {
+          setShowApple(true);
+        }}
+      >
+        Apple
+      </button>
+
+      {showApple && (
+        <CreateApplePlaylist
+          appleDeveloperToken={appleDeveloperToken}
+          spotifyAccessToken={spotifyAccessToken}
+        />
+      )}
+    </>
+  );
 }
