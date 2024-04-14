@@ -1,7 +1,6 @@
-"use client";
 const jwt = require("jsonwebtoken");
 
-import CreateApplePlaylist from "@/components/create-apple-playlist";
+import CreateAppleMusicPlaylist from "@/components/create-apple-playlist";
 import CreateSpotifyPlaylist from "@/components/create-spotify-playlist";
 
 export default async function Create({
@@ -9,14 +8,6 @@ export default async function Create({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) {
-  if (searchParams === undefined) {
-    const client_id = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
-    const redirect_uri = process.env.REDIRECT_URI;
-    const scope = encodeURIComponent(
-      "playlist-modify-public playlist-modify-private"
-    );
-    window.location.href = `https://accounts.spotify.com/authorize?response_type=code&client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}`;
-  }
   let spotifyAccessToken = "";
   let appleDeveloperToken = "";
 
@@ -99,10 +90,13 @@ export default async function Create({
     );
   } else {
     return (
-      <CreateApplePlaylist
-        appleDeveloperToken={appleDeveloperToken}
-        spotifyAccessToken={spotifyAccessToken}
-      />
+      <CreateAppleMusicPlaylist appleDeveloperToken={appleDeveloperToken} />
     );
   }
+
+  //   return searchParams.code ? (
+  //     <CreateSpotifyPlaylist token={spotifyAccessToken} />
+  //   ) : (
+  //     <p>Authenticating...</p>
+  //   );
 }
