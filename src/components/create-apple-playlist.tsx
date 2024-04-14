@@ -22,6 +22,7 @@ export default function CreateApplePlaylist({
     localStorage.clear();
     const handleConnectWithApple = async () => {
       if (window.MusicKit) {
+        console.log("in");
         try {
           const music = window.MusicKit.configure({
             developerToken: appleDeveloperToken,
@@ -29,6 +30,7 @@ export default function CreateApplePlaylist({
               name: "playlist-hosted",
             },
           });
+          console.log(appleDeveloperToken);
 
           const appleUserToken = await music.authorize();
           localStorage.setItem("appleUserToken", appleUserToken);
