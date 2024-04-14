@@ -19,6 +19,7 @@ export default function CreateApplePlaylist({
   const [message, setMessage] = useState("");
 
   useEffect(() => {
+    console.log(appleDeveloperToken);
     localStorage.clear();
     const handleConnectWithApple = async () => {
       if (window.MusicKit) {
@@ -43,6 +44,7 @@ export default function CreateApplePlaylist({
     };
 
     if (!localStorage.getItem("appleUserToken")) {
+      console.log("here");
       handleConnectWithApple();
     }
   }, [appleDeveloperToken]);
