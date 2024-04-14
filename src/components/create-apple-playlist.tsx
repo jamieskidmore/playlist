@@ -1,22 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import GetAppleUserToken from "./get-apple-user-token";
+import { useState, useEffect } from "react";
+
+declare global {
+  interface Window {
+    MusicKit: any;
+  }
+}
 
 const songs = [{ track: "Back to Black", artist: "Amy Winehouse" }];
 
-export default function CreateAppleMusicPlaylist({
+export default function CreateApplePlaylist({
   appleDeveloperToken,
 }: {
   appleDeveloperToken: string;
 }) {
+  const [inputValue, setInputValue] = useState("");
   const [message, setMessage] = useState("");
-  const test = (e: any) => {
-    e.preventDefault();
-    console.log(localStorage.getItem("appleUserToken"));
-  };
 
   useEffect(() => {
+    localStorage.clear();
     const handleConnectWithApple = async () => {
       if (window.MusicKit) {
         try {
@@ -42,131 +45,63 @@ export default function CreateAppleMusicPlaylist({
     }
   }, [appleDeveloperToken]);
 
-  //   const [songsNotFound, setSongsNotFound] = useState([""]);
-
-  //   const getCurrentSpotifyUserId = async () => {
-  //     const url = "https://api.spotify.com/v1/me";
-
+  // const getPlaylistFromSpotify = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   const url = formatSpotifyUrlForApi(inputValue);
+  //   if (url) {
   //     try {
-  //       const response = await fetch(url, {
+  //       const playlistResponse = await fetch(url, {
   //         method: "GET",
-  //         headers: { Authorization: `Bearer ${token}` },
+  //         headers: { Authorization: `Bearer ${spotifyAccessToken}` },
   //       });
-
-  //       if (response.ok) {
-  //         const data = await response.json();
-  //         return data.id;
-  //       } else {
-  //         console.log("Error getting user id");
-  //       }
+  //       const playlistData = await playlistResponse.json();
+  //       console.log(playlistData);
+  //       // const tracks = playlistData.data[0].relationships.tracks.data.map(
+  //       //   (track: {
+  //       //     attributes: { name: string; artistName: string; albumName: string };
+  //       //   }) => {
+  //       //     return {
+  //       //       name: track.attributes.name,
+  //       //       artist: track.attributes.artistName,
+  //       //       album: track.attributes.albumName,
+  //       //     };
+  //       //   }
+  //       // );
+  //       // setApplePlaylistTracks(tracks);
+  //       // setNewPlaylistArtwork(playlistData.data[0].attributes.artwork);
+  //       // setNewPlaylistName(playlistData.data[0].attributes.name);
+  //       // setNewPlaylistDescription(playlistData.data[0].attributes.description);
   //     } catch (error) {
   //       console.log("error", error);
   //     }
-  //   };
+  //   }
+  // };
 
-  //   const createSpotifyPlaylist = async (e: React.FormEvent) => {
-  //     e.preventDefault();
-  //     setMessage("Connecting to Spotify");
+  const formatSpotifyUrlForApi = (spotifyUrl: string): string | null => {
+    const playlistUrl = spotifyUrl.split("/");
+    return `https://api.spotify.com/v1/playlists/${playlistUrl[4]}`;
+  };
 
-  //     try {
-  //       const currentSpotifyUserId = await getCurrentSpotifyUserId();
-  //       if (!currentSpotifyUserId) {
-  //         setMessage("Failed to get Spotify user ID.");
-  //         return;
-  //       }
-  //       setMessage(`Creating playlist for ${currentSpotifyUserId}`);
-
-  //       const playlistResponse = await fetch(
-  //         `https://api.spotify.com/v1/users/${currentSpotifyUserId}/playlists`,
-  //         {
-  //           method: "POST",
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //             "Content-Type": "application/json",
-  //           },
-  //           body: JSON.stringify({
-  //             name: "New Playlist",
-  //             description: "New playlist description",
-  //             public: true,
-  //           }),
-  //         }
-  //       );
-
-  //       const playlistData = await playlistResponse.json();
-  //       await handleCreateSpotifyPlaylist(playlistData.id);
-  //       setMessage("Playlist created.");
-  //     } catch (error) {
-  //       console.error("Error creating playlist:", error);
-  //     }
-  //   };
-
-  //   const handleCreateSpotifyPlaylist = async (playlistSpotifyId: string) => {
-  //     setMessage("Finding songs");
-  //     const notFoundTracks = [];
-
-  //     for (const song of songs) {
-  //       try {
-  //         const searchResponse = await fetch(
-  //           `https://api.spotify.com/v1/search?q=${encodeURIComponent(
-  //             `${song.artist} ${song.track}`
-  //           )}&type=track`,
-  //           {
-  //             method: "GET",
-  //             headers: { Authorization: `Bearer ${token}` },
-  //           }
-  //         );
-  //         const searchData = await searchResponse.json();
-
-  //         if (searchData.tracks.items.length !== 0) {
-  //           const track = searchData.tracks.items[0];
-  //           addSongToPlaylist(track.id, track.name, playlistSpotifyId);
-  //         } else {
-  //           notFoundTracks.push(song.track);
-  //         }
-  //       } catch (error) {
-  //         console.error("Error adding song:", error);
-  //       }
-  //     }
-
-  //     setSongsNotFound(notFoundTracks);
-  //   };
-
-  //   const addSongToPlaylist = (
-  //     songSpotifyId: string,
-  //     songName: string,
-  //     playlistSpotifyId: string
-  //   ) => {
-  //     const url = `https://api.spotify.com/v1/playlists/${playlistSpotifyId}/tracks`;
-  //     const bodyData = {
-  //       uris: [`spotify:track:${songSpotifyId}`],
-  //     };
-  //     setMessage(`Adding song: ${songName}`);
-
-  //     fetch(url, {
-  //       method: "POST",
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(bodyData),
-  //     })
-  //       .then((response) => response.json())
-  //       .then((data) => console.log(data))
-  //       .catch((error) => console.error("error", error));
-  //   };
-
-  return message == "" ? (
-    <>
-      <GetAppleUserToken appleDeveloperToken={appleDeveloperToken} />
-      <p>Enter something...</p>
-      <form onSubmit={(e) => test(e)}>
-        <input type="text" className="text-black"></input>
-        <button type="submit" className="bg-white text-black">
-          Go
-        </button>
-      </form>
-    </>
+  return message === "" ? (
+    <div>
+      <p>Connecting to Apple...</p>
+    </div>
   ) : (
-    message
+    <>
+      <div>
+        <p>Enter an Apple Music playlist link below</p>
+        <form>
+          <input
+            type="text"
+            className="text-black"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+          />
+          <button type="submit" className="bg-white text-black">
+            Go
+          </button>
+        </form>
+      </div>
+    </>
   );
 }
