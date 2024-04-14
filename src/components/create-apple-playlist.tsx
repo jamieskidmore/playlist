@@ -17,6 +17,9 @@ export default function CreateApplePlaylist({
   appleDeveloperToken: string;
   spotifyAccessToken: string;
 }) {
+  const [spotifyPlaylistTracks, setSpotifyPlaylistTracks] = useState([
+    { name: "", artists: [""], album: "" },
+  ]);
   const [inputValue, setInputValue] = useState("");
   const [message, setMessage] = useState("");
 
@@ -57,24 +60,25 @@ export default function CreateApplePlaylist({
           headers: { Authorization: `Bearer ${spotifyAccessToken}` },
         });
         const playlistData = await playlistResponse.json();
-        console.log(1);
-        console.log(playlistData.tracks.items[0].track.name);
-        console.log(2);
-        console.log(playlistData.tracks.items[0].track.album.name);
-        console.log(3);
-        console.log(playlistData.tracks.items[0].track.artists);
-        console.log(4);
-        console.log(playlistData.tracks.items[0].track.artists[0].name);
+        console.log(playlistData.tracks);
 
-        const tracks = playlistData.tracks.items.map((item: any) => {
-          return {
-            name: item.track.name,
-            artist: item.track.artists[0].name,
-            album: item.track.album.name,
-          };
-        });
+        const tracks = playlistData.tracks.items.map(
+          (item: {
+            track: {
+              name: string;
+              artists: { name: string }[];
+              album: { name: string };
+            };
+          }) => {
+            return {
+              name: item.track.name,
+              artists: item.track.artists,
+              album: item.track.album.name,
+            };
+          }
+        );
+        setSpotifyPlaylistTracks(tracks);
         console.log(tracks);
-        // setApplePlaylistTracks(tracks);
         // setNewPlaylistArtwork(playlistData.data[0].attributes.artwork);
         // setNewPlaylistName(playlistData.data[0].attributes.name);
         // setNewPlaylistDescription(playlistData.data[0].attributes.description);
