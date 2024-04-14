@@ -1,3 +1,5 @@
+"use client";
+
 export default function ConnectWithSpotify() {
   const client_id = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
   const redirect_uri = process.env.REDIRECT_URI;
