@@ -44,7 +44,7 @@ export default function CreateApplePlaylist({
     };
 
     if (!localStorage.getItem("appleUserToken")) {
-      console.log("here");
+      console.log(window.MusicKit);
       handleConnectWithApple();
     }
   }, [appleDeveloperToken]);
