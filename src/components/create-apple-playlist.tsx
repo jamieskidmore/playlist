@@ -64,9 +64,9 @@ export default function CreateApplePlaylist({
         console.log(3);
         console.log(playlistData.tracks.items);
         console.log(4);
-        playlistData.tracks.items[0].track;
+        console.log(playlistData.tracks.items[0].track);
         console.log(5);
-        playlistData.tracks.items[0].track.name;
+        console.log(playlistData.tracks.items[0].track.name);
 
         // const tracks = playlistData.data[0].relationships.tracks.data.map(
         //   (track: {
