@@ -21,9 +21,9 @@ export default function CreateApplePlaylist({
     { name: "", artists: [""], album: "" },
   ]);
   const [inputValue, setInputValue] = useState("");
-  const [message, setMessage] = useState("");
   const [appleUserToken, setAppleUserToken] = useState("");
-  const [appleTrackHrefs, setAppleTrackHrefs] = useState<string[]>([]);
+
+  const [message, setMessage] = useState("");
   const [songsNotFound, setSongsNotFound] = useState<string[]>([]);
 
   useEffect(() => {
@@ -55,12 +55,15 @@ export default function CreateApplePlaylist({
   }, [appleDeveloperToken]);
 
   useEffect(() => {
-    const createApplePlaylist = async () => {
-      getSongsFromApple();
+    const handleCreateApplePlaylist = async () => {
+      const songs = getSongsFromApple();
+      if (songs) {
+        createApplePlaylist(songs);
+      }
     };
 
     if (spotifyPlaylistTracks !== null) {
-      createApplePlaylist();
+      handleCreateApplePlaylist();
     }
   }, [spotifyPlaylistTracks]);
 
@@ -143,12 +146,16 @@ export default function CreateApplePlaylist({
           notFound.push(track.name);
         }
       });
-      setAppleTrackHrefs(hrefs);
       setSongsNotFound(notFound);
+      return hrefs;
     } catch (error) {
       console.log("error", error);
     }
     return;
+  };
+
+  const createApplePlaylist = (songs: string[]) => {
+    console.log(songs);
   };
 
   // return message === "" ? (
