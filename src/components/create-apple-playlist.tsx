@@ -8,8 +8,6 @@ declare global {
   }
 }
 
-const songs = [{ track: "Back to Black", artist: "Amy Winehouse" }];
-
 export default function CreateApplePlaylist({
   appleDeveloperToken,
   spotifyAccessToken,
@@ -17,9 +15,9 @@ export default function CreateApplePlaylist({
   appleDeveloperToken: string;
   spotifyAccessToken: string;
 }) {
-  const [spotifyPlaylistTracks, setSpotifyPlaylistTracks] = useState([
-    { name: "", artists: [{ name: "" }], album: "" },
-  ]);
+  const [spotifyPlaylistTracks, setSpotifyPlaylistTracks] = useState<
+    { name: string; artists: [{ name: string }]; album: string }[]
+  >([]);
   const [inputValue, setInputValue] = useState("");
   const [appleUserToken, setAppleUserToken] = useState("");
 
