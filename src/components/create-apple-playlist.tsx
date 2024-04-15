@@ -212,6 +212,7 @@ export default function CreateApplePlaylist({
 
   const getNewPlaylistUrl = async (id: string) => {
     try {
+      console.log(id);
       const response = await fetch(
         `https://api.music.apple.com/v1/catalog/ca/playlists/${id}`,
         {
@@ -234,7 +235,7 @@ export default function CreateApplePlaylist({
 
       return url;
     } catch (error) {
-      console.error("Failed to create playlist:", error);
+      console.error("Failed to get url", error);
     }
   };
 
