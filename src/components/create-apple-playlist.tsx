@@ -223,7 +223,7 @@ export default function CreateApplePlaylist({
       }
       const data = await response.json();
       let globalId = "";
-      data.forEach((item: any) => {
+      data.data.forEach((item: any) => {
         console.log(item);
       });
     } catch (error) {
