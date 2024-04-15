@@ -59,9 +59,11 @@ export default function CreateApplePlaylist({
 
         const appleTracks: any = [];
 
-        spotifyPlaylistTracks.map(async (tracks: any) => {
+        spotifyPlaylistTracks.map(async (track: any) => {
+          const artistNames = track.artists.map((artist: any) => artist.name);
+
           const queryString = new URLSearchParams({
-            term: `${tracks.name} ${tracks.artists.join(" ")} ${tracks.album}`,
+            term: `${track.name} ${artistNames.join(" ")} ${track.album}`,
             types: "songs",
             limit: "10",
           }).toString();
@@ -76,8 +78,9 @@ export default function CreateApplePlaylist({
               },
             }
           );
-          appleTracks.push(playlistResponse);
-          console.log(playlistResponse);
+          const playlistData = await playlistResponse.json();
+          appleTracks.push(playlistData);
+          console.log(playlistData);
         });
         console.log(appleTracks);
 
