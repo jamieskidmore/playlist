@@ -139,7 +139,7 @@ export default function CreateApplePlaylist({
 
           if (searchResponse.ok) {
             const search = await searchResponse.json();
-            if (search.results.songs.data.length > 0) {
+            if (search.results.songs && search.results.songs.data.length > 0) {
               catalogIds.push(search.results.songs.data[0].id);
             } else {
               notFound.push(track.name); // Add track name to notFound array
