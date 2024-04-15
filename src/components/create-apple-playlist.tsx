@@ -67,7 +67,7 @@ export default function CreateApplePlaylist({
             types: "songs",
             limit: "10",
           }).toString();
-          const playlistResponse = await fetch(
+          const searchResponse = await fetch(
             `https://api.music.apple.com/v1/catalog/ca/search?${queryString}`,
             {
               method: "GET",
@@ -78,11 +78,13 @@ export default function CreateApplePlaylist({
               },
             }
           );
-          const playlistData = await playlistResponse.json();
-          appleTracks.push(playlistData);
-          console.log(playlistData);
+          if (searchResponse) {
+            const search = await searchResponse.json();
+            console.log(search.results.songs.data.href);
+          } else {
+            console.log("Not found: " + track.name);
+          }
         });
-        console.log(appleTracks);
 
         setMessage("Playlist created.");
       } catch (error) {
