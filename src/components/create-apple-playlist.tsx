@@ -67,6 +67,7 @@ export default function CreateApplePlaylist({
             types: "songs",
             limit: "10",
           }).toString();
+
           const searchResponse = await fetch(
             `https://api.music.apple.com/v1/catalog/ca/search?${queryString}`,
             {
@@ -78,6 +79,7 @@ export default function CreateApplePlaylist({
               },
             }
           );
+
           if (searchResponse) {
             const search = await searchResponse.json();
             console.log(search.results.songs.data.href);
@@ -107,7 +109,6 @@ export default function CreateApplePlaylist({
           headers: { Authorization: `Bearer ${spotifyAccessToken}` },
         });
         const playlistData = await playlistResponse.json();
-        console.log(playlistData.tracks);
 
         const tracks = playlistData.tracks.items.map(
           (item: {
@@ -117,6 +118,7 @@ export default function CreateApplePlaylist({
               album: { name: string };
             };
           }) => {
+            console.log("here is an item: " + item);
             return {
               name: item.track.name,
               artists: item.track.artists,
@@ -137,6 +139,7 @@ export default function CreateApplePlaylist({
 
   const formatSpotifyUrlForApi = (spotifyUrl: string): string | null => {
     const playlistUrl = spotifyUrl.split("/");
+    console.log(playlistUrl[4]);
     return `https://api.spotify.com/v1/playlists/${playlistUrl[4]}`;
   };
 
