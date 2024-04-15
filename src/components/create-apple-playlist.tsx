@@ -109,13 +109,12 @@ export default function CreateApplePlaylist({
   };
 
   const getSongsFromApple = async () => {
-    const hrefs: string[] = [];
+    const catalogIds: string[] = [];
     const notFound: string[] = [];
     setMessage("Connecting to Apple");
     try {
       setMessage(`Creating playlist on Apple Music`);
 
-      // Use Promise.all to wait for all fetch operations to complete
       await Promise.all(
         spotifyPlaylistTracks.map(async (track) => {
           setMessage(`Adding song ${track.name}`);
@@ -141,9 +140,7 @@ export default function CreateApplePlaylist({
           if (searchResponse.ok) {
             const search = await searchResponse.json();
             if (search.results.songs.data.length > 0) {
-              hrefs.push(search.results.songs.data[0].href);
-              console.log("inside getSongs");
-              console.log(search.results.songs.data[0]);
+              catalogIds.push(search.results.songs.data[0].id);
             } else {
               notFound.push(track.name);
             }
@@ -154,17 +151,55 @@ export default function CreateApplePlaylist({
       );
 
       setSongsNotFound(notFound);
-      console.log(hrefs);
-      return hrefs; // Now hrefs is populated with all the hrefs
+      return catalogIds;
     } catch (error) {
       console.log("error", error);
     }
-    return []; // Return an empty array if there's an error
+    return [];
   };
 
-  const createApplePlaylist = (songs: string[]) => {
+  const createApplePlaylist = async (songs: string[]) => {
     console.log("inside create playlist");
     console.log(songs);
+
+    const playlistName = "Your Playlist Name";
+    const playlistDescription = "Your Playlist Description";
+
+    const body = {
+      attributes: {
+        name: playlistName,
+        description: playlistDescription,
+      },
+      relationships: {
+        tracks: {
+          data: songs.map((id) => ({ id: id, type: "library-songs" })),
+        },
+      },
+    };
+
+    try {
+      const response = await fetch(
+        "https://api.music.apple.com/v1/me/library/playlists",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${appleDeveloperToken}`,
+            "Music-User-Token": appleUserToken,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Playlist created successfully:", data);
+    } catch (error) {
+      console.error("Failed to create playlist:", error);
+    }
   };
 
   // return message === "" ? (
