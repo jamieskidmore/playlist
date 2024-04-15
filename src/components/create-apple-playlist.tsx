@@ -211,7 +211,8 @@ export default function CreateApplePlaylist({
         {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${appleUserToken}`,
+            Authorization: `Bearer ${appleDeveloperToken}`,
+            "Music-User-Token": appleUserToken,
             "Content-Type": "application/json",
           },
         }
