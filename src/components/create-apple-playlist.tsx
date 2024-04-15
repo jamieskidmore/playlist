@@ -20,9 +20,11 @@ export default function CreateApplePlaylist({
   >([]);
   const [inputValue, setInputValue] = useState("");
   const [appleUserToken, setAppleUserToken] = useState("");
-
   const [message, setMessage] = useState("");
   const [songsNotFound, setSongsNotFound] = useState<string[]>([]);
+  const [newPlaylistName, setNewPlaylistName] = useState("");
+  const [newPlaylistDescription, setNewPlaylistDescription] = useState("");
+  const [newPlaylistUrl, setNewPlaylistUrl] = useState("");
 
   useEffect(() => {
     localStorage.clear();
@@ -93,9 +95,8 @@ export default function CreateApplePlaylist({
           }
         );
         setSpotifyPlaylistTracks(tracks);
-        // setNewPlaylistArtwork(playlistData.data[0].attributes.artwork);
-        // setNewPlaylistName(playlistData.data[0].attributes.name);
-        // setNewPlaylistDescription(playlistData.data[0].attributes.description);
+        setNewPlaylistName(playlistData.name);
+        setNewPlaylistDescription(playlistData.description);
       } catch (error) {
         console.log("error", error);
       }
@@ -195,7 +196,7 @@ export default function CreateApplePlaylist({
       }
 
       const data = await response.json();
-      console.log("Playlist created successfully:", data);
+      setNewPlaylistUrl(data.href);
     } catch (error) {
       console.error("Failed to create playlist:", error);
     }
@@ -219,11 +220,11 @@ export default function CreateApplePlaylist({
   ) : (
     <>
       {message}
-      {/* {newPlaylistUrl && (
+      {newPlaylistUrl && (
         <a href={newPlaylistUrl}>
           <button className="bg-white text-black">Link to new Playlist</button>
         </a>
-      )} */}
+      )}
 
       {songsNotFound && songsNotFound.length > 0 && (
         <div>
