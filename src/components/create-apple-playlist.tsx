@@ -142,7 +142,7 @@ export default function CreateApplePlaylist({
             if (search.results.songs.data.length > 0) {
               catalogIds.push(search.results.songs.data[0].id);
             } else {
-              notFound.push(track.name);
+              notFound.push(track.name); // Add track name to notFound array
             }
           } else {
             console.error("Search response error:", searchResponse.statusText);
@@ -150,18 +150,15 @@ export default function CreateApplePlaylist({
         })
       );
 
-      setSongsNotFound(notFound);
+      setSongsNotFound(notFound); // Set notFound array after all tracks are processed
       return catalogIds;
     } catch (error) {
-      console.log("error", error);
+      console.error("Error:", error);
+      return [];
     }
-    return [];
   };
 
   const createApplePlaylist = async (songs: string[]) => {
-    console.log("inside create playlist");
-    console.log(songs);
-
     const body = {
       attributes: {
         name: newPlaylistName,
@@ -194,6 +191,8 @@ export default function CreateApplePlaylist({
 
       const createdPlaylist = await response.json();
 
+      setMessage("Playlist created!");
+
       setNewPlaylistUrl(
         "https://music.apple.com/us/library/all-playlists/?l=en-US"
       );
@@ -221,7 +220,7 @@ export default function CreateApplePlaylist({
     <>
       {message}
       {newPlaylistUrl && (
-        <a href={newPlaylistUrl}>
+        <a href={newPlaylistUrl} target="_blank">
           <button className="bg-white text-black">Link to new Playlist</button>
         </a>
       )}
