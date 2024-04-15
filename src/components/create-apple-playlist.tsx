@@ -41,6 +41,7 @@ export default function CreateApplePlaylist({
           const userToken = await music.authorize();
           setAppleUserToken(userToken);
           setMessage("User connected with apple!");
+          setMessage("");
         } catch (error) {
           setMessage("MusicKit Authorization Failed.");
           console.error("MusicKit Authorization Failed:", error);
