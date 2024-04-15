@@ -194,40 +194,11 @@ export default function CreateApplePlaylist({
 
       const createdPlaylist = await response.json();
 
-      const newPlaylistUrl = await getNewPlaylistUrl(
-        createdPlaylist.data[0].id
+      setNewPlaylistUrl(
+        "https://music.apple.com/us/library/all-playlists/?l=en-US"
       );
-      // console.log(newPlaylistUrl);
     } catch (error) {
       console.error("Failed to create playlist:", error);
-    }
-  };
-
-  const getNewPlaylistUrl = async (id: string) => {
-    try {
-      console.log(id);
-      const response = await fetch(
-        `https://api.music.apple.com/v1/me/library/playlists`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${appleDeveloperToken}`,
-            "Music-User-Token": appleUserToken,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      let globalId = "";
-      data.data.forEach((item: any) => {
-        console.log(item);
-      });
-    } catch (error) {
-      console.error("Failed to get url", error);
     }
   };
 
