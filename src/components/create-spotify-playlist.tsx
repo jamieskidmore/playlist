@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import PlaylistForm from "./playlist-form";
 
@@ -225,5 +226,51 @@ export default function CreateSpotifyPlaylist({
       songsNotFound={songsNotFound}
       newPlaylistUrl={newPlaylistUrl}
     />
+  );
+
+  return message == "" ? (
+    <>
+      <div className="text-orange-300 bg-green-700 p-5 text-center text-xl mx-auto">
+        <p>Enter an Apple Music playlist link below</p>
+      </div>
+      <form
+        onSubmit={async (e) => await getPlaylistFromApple(e)}
+        className="flex flex-col space-y-5"
+      >
+        <input
+          type="text"
+          className=" text-black text-center bg-transparent border-2 border-black placeholder-black rounded-3xl"
+          placeholder="playlist link"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
+        <button type="submit" className="text-6xl font-extrabold text-outline">
+          Convert to Spotify
+        </button>
+      </form>
+    </>
+  ) : (
+    <>
+      {songsNotFound && songsNotFound.length > 0 && (
+        <div className="text-orange-300 bg-green-700 p-5 text-center text-xl mx-auto">
+          <p>The following song(s) were not added:</p>
+          <ul className="text-lg">
+            {songsNotFound.map((song, index) => (
+              <li key={index}>{song}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <p className="text-black text-center"> {message}</p>
+
+      {newPlaylistUrl && (
+        <a href={newPlaylistUrl}>
+          <button className="text-6xl font-extrabold text-outline">
+            Link to new Playlist
+          </button>
+        </a>
+      )}
+    </>
   );
 }
