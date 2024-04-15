@@ -197,7 +197,7 @@ export default function CreateApplePlaylist({
 
       const data = await response.json();
       console.log(data);
-      console.log(data.id);
+      console.log(data.json());
       console.log(data.href);
       console.log(data[0]);
       setNewPlaylistUrl(data.id);
