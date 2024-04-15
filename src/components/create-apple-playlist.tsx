@@ -111,10 +111,7 @@ export default function CreateApplePlaylist({
   const getSongsFromApple = async () => {
     const catalogIds: string[] = [];
     const notFound: string[] = [];
-    setMessage("Connecting to Apple");
     try {
-      setMessage(`Creating playlist on Apple Music`);
-
       await Promise.all(
         spotifyPlaylistTracks.map(async (track) => {
           setMessage(`Adding song ${track.name}`);
@@ -142,7 +139,7 @@ export default function CreateApplePlaylist({
             if (search.results.songs && search.results.songs.data.length > 0) {
               catalogIds.push(search.results.songs.data[0].id);
             } else {
-              notFound.push(track.name); // Add track name to notFound array
+              notFound.push(track.name);
             }
           } else {
             console.error("Search response error:", searchResponse.statusText);
@@ -150,7 +147,7 @@ export default function CreateApplePlaylist({
         })
       );
 
-      setSongsNotFound(notFound); // Set notFound array after all tracks are processed
+      setSongsNotFound(notFound);
       return catalogIds;
     } catch (error) {
       console.error("Error:", error);

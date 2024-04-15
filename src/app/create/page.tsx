@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 import CreateApplePlaylist from "@/components/create-apple-playlist";
 import CreatePlaylist from "@/components/create-playlist";
 import CreateSpotifyPlaylist from "@/components/create-spotify-playlist";
+import StarRow from "@/components/star-row";
 
 export default async function Create({
   searchParams,
@@ -83,11 +84,45 @@ export default async function Create({
   handleConnectWithApple();
 
   return (
-    <>
-      <CreatePlaylist
-        spotifyAccessToken={spotifyAccessToken}
-        appleDeveloperToken={appleDeveloperToken}
-      />
-    </>
+    <main className="flex flex-col justify-center items-center h-screen text-6xl overflow-hidden">
+      <StarRow colour="text-blue-800" />
+      <StarRow colour="text-blue-800" />
+      <StarRow colour="text-blue-800" />
+      <StarRow colour="text-blue-800" />
+      <StarRow colour="text-blue-800" />
+      <StarRow colour="text-blue-800" />
+      <div className="flex my-5 text-3xl w-full justify-between items-center">
+        <div className={`w-full space-y-3 p-3 hidden md:block`}>
+          <StarRow colour="text-blue-800" />
+          <StarRow colour="text-blue-800" />
+          <StarRow colour="text-blue-800" />
+          <StarRow colour="text-blue-800" />
+          <StarRow colour="text-blue-800" />
+          <StarRow colour="text-blue-800" />
+        </div>
+        <div className="items-center w-full m-2 min-w-72">
+          <div className="flex flex-col justify-center items-center space-y-5 min-w-40 mx-auto md:min-w-72">
+            <CreatePlaylist
+              spotifyAccessToken={spotifyAccessToken}
+              appleDeveloperToken={appleDeveloperToken}
+            />
+          </div>
+        </div>
+        <div className={`w-full space-y-3 p-3 hidden md:block`}>
+          <StarRow colour="text-blue-800" />
+          <StarRow colour="text-blue-800" />
+          <StarRow colour="text-blue-800" />
+          <StarRow colour="text-blue-800" />
+          <StarRow colour="text-blue-800" />
+          <StarRow colour="text-blue-800" />
+        </div>
+      </div>
+      <StarRow colour="text-blue-800" />
+      <StarRow colour="text-blue-800" />
+      <StarRow colour="text-blue-800" />
+      <StarRow colour="text-blue-800" />
+      <StarRow colour="text-blue-800" />
+      <StarRow colour="text-blue-800" />
+    </main>
   );
 }

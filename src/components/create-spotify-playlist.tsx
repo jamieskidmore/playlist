@@ -216,16 +216,22 @@ export default function CreateSpotifyPlaylist({
 
   return message == "" ? (
     <>
-      <p>Enter an Apple Music playlist link below</p>
-      <form onSubmit={async (e) => await getPlaylistFromApple(e)}>
+      <div className="text-orange-300 bg-green-700 p-5 text-center text-xl mx-auto">
+        <p>Enter an Apple Music playlist link below</p>
+      </div>
+      <form
+        onSubmit={async (e) => await getPlaylistFromApple(e)}
+        className="flex flex-col space-y-5"
+      >
         <input
           type="text"
-          className="text-black"
+          className=" text-black text-center bg-transparent border-2 border-black placeholder-black rounded-3xl"
+          placeholder="apple playlist link"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />
-        <button type="submit" className="bg-white text-black">
-          Go
+        <button type="submit" className="text-6xl font-extrabold text-outline">
+          Convert to Spotify
         </button>
       </form>
     </>

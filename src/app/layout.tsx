@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Anton } from "next/font/google";
 import "./globals.css";
 import Head from "next/head";
 import Script from "next/script";
+import Image from "next/image";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Anton({ subsets: ["latin"], weight: "400" });
 
 export const metadata: Metadata = {
   title: "Playlist",
@@ -19,7 +20,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {children}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/static.png"
+            alt="background"
+            width={100}
+            height={100}
+            className="h-screen w-full"
+          />
+        </div>
+        <div className="z-10 relative">{children}</div>
         <Script
           src="https://js-cdn.music.apple.com/musickit/v1/musickit.js"
           strategy="beforeInteractive"

@@ -31,3 +31,9 @@ body {
     text-wrap: balance;
   }
 }
+
+.text-outline {
+  -webkit-text-stroke: 4px purple; /* Adjust the stroke width and color as needed */
+  text-stroke: 2px rgb(91, 26, 91); /* Standard property, but not widely supported yet */
+  color: transparent; /* Make the text itself transparent */
+}
