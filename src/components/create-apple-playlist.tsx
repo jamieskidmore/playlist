@@ -145,7 +145,6 @@ export default function CreateApplePlaylist({
       });
       setAppleTrackHrefs(hrefs);
       setSongsNotFound(notFound);
-      setMessage("Playlist created.");
     } catch (error) {
       console.log("error", error);
     }
