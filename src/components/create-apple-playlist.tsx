@@ -82,7 +82,7 @@ export default function CreateApplePlaylist({
 
           if (searchResponse) {
             const search = await searchResponse.json();
-            console.log(search.results.songs[0].href);
+            console.log(search.results.songs);
           } else {
             console.log("Not found: " + track.name);
           }
