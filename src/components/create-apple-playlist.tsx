@@ -18,7 +18,7 @@ export default function CreateApplePlaylist({
   spotifyAccessToken: string;
 }) {
   const [spotifyPlaylistTracks, setSpotifyPlaylistTracks] = useState([
-    { name: "", artists: [""], album: "" },
+    { name: "", artists: [{ name: "" }], album: "" },
   ]);
   const [inputValue, setInputValue] = useState("");
   const [appleUserToken, setAppleUserToken] = useState("");
@@ -55,8 +55,8 @@ export default function CreateApplePlaylist({
   }, [appleDeveloperToken]);
 
   useEffect(() => {
-    const handleCreateApplePlaylist = () => {
-      const songs = getSongsFromApple();
+    const handleCreateApplePlaylist = async () => {
+      const songs = await getSongsFromApple();
       if (songs) {
         createApplePlaylist(songs);
       }
@@ -108,51 +108,58 @@ export default function CreateApplePlaylist({
     return `https://api.spotify.com/v1/playlists/${playlistUrl[4]}`;
   };
 
-  const getSongsFromApple = () => {
+  const getSongsFromApple = async () => {
     const hrefs: string[] = [];
     const notFound: string[] = [];
     setMessage("Connecting to Apple");
     try {
       setMessage(`Creating playlist on Apple Music`);
 
-      spotifyPlaylistTracks.map(async (track: any) => {
-        setMessage(`Adding song ${track.name}`);
-        const artistNames = track.artists.map((artist: any) => artist.name);
+      // Use Promise.all to wait for all fetch operations to complete
+      await Promise.all(
+        spotifyPlaylistTracks.map(async (track) => {
+          setMessage(`Adding song ${track.name}`);
+          const artistNames = track.artists.map((artist) => artist.name);
 
-        const queryString = new URLSearchParams({
-          term: `${track.name} ${artistNames.join(" ")} ${track.album}`,
-          types: "songs",
-          limit: "10",
-        }).toString();
+          const queryString = new URLSearchParams({
+            term: `${track.name} ${artistNames.join(" ")} ${track.album}`,
+            types: "songs",
+            limit: "10",
+          }).toString();
 
-        const searchResponse = await fetch(
-          `https://api.music.apple.com/v1/catalog/ca/search?${queryString}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${appleDeveloperToken}`,
-              // "Music-User-Token": appleUserToken,
-              "Content-Type": "application/json",
-            },
+          const searchResponse = await fetch(
+            `https://api.music.apple.com/v1/catalog/ca/search?${queryString}`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${appleDeveloperToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          if (searchResponse.ok) {
+            const search = await searchResponse.json();
+            if (search.results.songs.data.length > 0) {
+              hrefs.push(search.results.songs.data[0].href);
+              console.log("inside getSongs");
+              console.log(search.results.songs.data[0]);
+            } else {
+              notFound.push(track.name);
+            }
+          } else {
+            console.error("Search response error:", searchResponse.statusText);
           }
-        );
+        })
+      );
 
-        if (searchResponse) {
-          const search = await searchResponse.json();
-          hrefs.push(search.results.songs.data[0].href);
-          console.log("inside getSongs");
-          console.log(search.results.songs.data[0]);
-        } else {
-          notFound.push(track.name);
-        }
-      });
       setSongsNotFound(notFound);
       console.log(hrefs);
-      return hrefs;
+      return hrefs; // Now hrefs is populated with all the hrefs
     } catch (error) {
       console.log("error", error);
     }
-    return;
+    return []; // Return an empty array if there's an error
   };
 
   const createApplePlaylist = (songs: string[]) => {
