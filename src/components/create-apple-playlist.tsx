@@ -77,6 +77,10 @@ export default function CreateApplePlaylist({
           headers: { Authorization: `Bearer ${spotifyAccessToken}` },
         });
         const playlistData = await playlistResponse.json();
+        console.log("response");
+        console.log(playlistResponse);
+        console.log("data");
+        console.log(playlistData);
 
         const tracks = playlistData.tracks.items.map(
           (item: {
