@@ -15,14 +15,14 @@ export default function CreatePlaylist({
   return (
     <>
       {showApple ? (
-        <CreateSpotifyPlaylist
-          spotifyAccessToken={spotifyAccessToken}
-          appleDeveloperToken={appleDeveloperToken}
-        />
-      ) : (
         <CreateApplePlaylist
           appleDeveloperToken={appleDeveloperToken}
           spotifyAccessToken={spotifyAccessToken}
+        />
+      ) : (
+        <CreateSpotifyPlaylist
+          spotifyAccessToken={spotifyAccessToken}
+          appleDeveloperToken={appleDeveloperToken}
         />
       )}
       <button
@@ -31,7 +31,7 @@ export default function CreatePlaylist({
         }}
         className="text-blue-800"
       >
-        {showApple ? "Switch to Apple" : "* Switch to Spotify*"}
+        {showApple ? "* Switch to Spotify *" : "* Switch to Apple *"}
       </button>
     </>
   );

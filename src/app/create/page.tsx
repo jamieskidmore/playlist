@@ -96,6 +96,7 @@ export default async function Create({
           <StarRow colour="text-blue-800" />
           <StarRow colour="text-blue-800" />
           <StarRow colour="text-blue-800" />
+
           <StarRow colour="text-blue-800" />
           <StarRow colour="text-blue-800" />
           <StarRow colour="text-blue-800" />

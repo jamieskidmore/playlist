@@ -226,7 +226,7 @@ export default function CreateSpotifyPlaylist({
         <input
           type="text"
           className=" text-black text-center bg-transparent border-2 border-black placeholder-black rounded-3xl"
-          placeholder="apple playlist link"
+          placeholder="playlist link"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />
@@ -237,22 +237,25 @@ export default function CreateSpotifyPlaylist({
     </>
   ) : (
     <>
-      {message}
-      {newPlaylistUrl && (
-        <a href={newPlaylistUrl}>
-          <button className="bg-white text-black">Link to new Playlist</button>
-        </a>
-      )}
-
       {songsNotFound && songsNotFound.length > 0 && (
-        <div>
+        <div className="text-orange-300 bg-green-700 p-5 text-center text-xl mx-auto">
           <p>The following song(s) were not added:</p>
-          <ul>
+          <ul className="text-lg">
             {songsNotFound.map((song, index) => (
               <li key={index}>{song}</li>
             ))}
           </ul>
         </div>
+      )}
+
+      <p className="text-black text-center"> {message}</p>
+
+      {newPlaylistUrl && (
+        <a href={newPlaylistUrl}>
+          <button className="text-6xl font-extrabold text-outline">
+            Link to new Playlist
+          </button>
+        </a>
       )}
     </>
   );
