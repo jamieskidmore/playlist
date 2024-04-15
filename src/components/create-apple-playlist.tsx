@@ -55,7 +55,7 @@ export default function CreateApplePlaylist({
   }, [appleDeveloperToken]);
 
   useEffect(() => {
-    const handleCreateApplePlaylist = async () => {
+    const handleCreateApplePlaylist = () => {
       const songs = getSongsFromApple();
       if (songs) {
         createApplePlaylist(songs);
