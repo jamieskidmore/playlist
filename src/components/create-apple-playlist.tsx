@@ -57,7 +57,7 @@ export default function CreateApplePlaylist({
   useEffect(() => {
     const handleCreateApplePlaylist = async () => {
       const songs = await getSongsFromApple();
-      if (songs) {
+      if (songs.length > 0) {
         createApplePlaylist(songs);
       }
     };
@@ -197,7 +197,7 @@ export default function CreateApplePlaylist({
 
       const data = await response.json();
       console.log(data);
-      setNewPlaylistUrl(data.href);
+      setNewPlaylistUrl(data[0].id);
     } catch (error) {
       console.error("Failed to create playlist:", error);
     }
