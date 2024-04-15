@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import PlaylistForm from "./playlist-form";
 
 export default function CreateSpotifyPlaylist({
   spotifyAccessToken,
@@ -22,7 +23,7 @@ export default function CreateSpotifyPlaylist({
   } | null>(null);
   const [newPlaylistName, setNewPlaylistName] = useState("New playlist");
   const [newPlaylistDescription, setNewPlaylistDescription] = useState("<3");
-  const [songsNotFound, setSongsNotFound] = useState<string[] | null>(null);
+  const [songsNotFound, setSongsNotFound] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState("");
 
   const getCurrentSpotifyUserId = async () => {
@@ -213,6 +214,19 @@ export default function CreateSpotifyPlaylist({
       createSpotifyPlaylist();
     }
   }, [applePlaylistTracks]);
+
+  return (
+    <PlaylistForm
+      message={message}
+      inputPlaceholder="Enter an Apple Music playlist link below"
+      buttonText="Convert to Spotify"
+      onSubmit={getPlaylistFromApple}
+      inputValue={inputValue}
+      setInputValue={setInputValue}
+      songsNotFound={songsNotFound}
+      newPlaylistUrl={newPlaylistUrl}
+    />
+  );
 
   return message == "" ? (
     <>

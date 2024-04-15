@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import PlaylistForm from "./playlist-form";
 
 declare global {
   interface Window {
@@ -198,41 +199,17 @@ export default function CreateApplePlaylist({
     }
   };
 
-  return message == "" ? (
-    <>
-      <p>Enter a Spotify playlist link below</p>
-      <form onSubmit={async (e) => await getPlaylistFromSpotify(e)}>
-        <input
-          type="text"
-          className="text-black"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-        />
-        <button type="submit" className="bg-white text-black">
-          Go
-        </button>
-      </form>
-    </>
-  ) : (
-    <>
-      {message}
-      {newPlaylistUrl && (
-        <a href={newPlaylistUrl} target="_blank">
-          <button className="bg-white text-black">Link to new Playlist</button>
-        </a>
-      )}
-
-      {songsNotFound && songsNotFound.length > 0 && (
-        <div>
-          <p>The following song(s) were not added:</p>
-          <ul>
-            {songsNotFound.map((song, index) => (
-              <li key={index}>{song}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </>
+  return (
+    <PlaylistForm
+      message={message}
+      inputPlaceholder="Enter a Spotify playlist link below"
+      buttonText="Convert to Apple Music"
+      onSubmit={getPlaylistFromSpotify}
+      inputValue={inputValue}
+      setInputValue={setInputValue}
+      songsNotFound={songsNotFound}
+      newPlaylistUrl={newPlaylistUrl}
+    />
   );
 }
 
