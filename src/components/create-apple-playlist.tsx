@@ -221,7 +221,11 @@ export default function CreateApplePlaylist({
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      console.log(await response.json());
+      const data = await response.json();
+      let globalId = "";
+      data.forEach((item: any) => {
+        console.log(item);
+      });
     } catch (error) {
       console.error("Failed to get url", error);
     }
