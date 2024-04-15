@@ -197,6 +197,8 @@ export default function CreateApplePlaylist({
       };
 
       const newPlaylist = await response.json();
+
+      console.log(newPlaylist);
       const formattedPlaylistName = formatPlaylistName(newPlaylistName);
       setNewPlaylistUrl(
         `https://music.apple.com/playlist/${formattedPlaylistName}/${newPlaylist.data[0].id}`
