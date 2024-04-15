@@ -77,10 +77,6 @@ export default function CreateApplePlaylist({
           headers: { Authorization: `Bearer ${spotifyAccessToken}` },
         });
         const playlistData = await playlistResponse.json();
-        console.log("response");
-        console.log(playlistResponse);
-        console.log("data");
-        console.log(playlistData);
 
         const tracks = playlistData.tracks.items.map(
           (item: {
@@ -90,7 +86,6 @@ export default function CreateApplePlaylist({
               album: { name: string };
             };
           }) => {
-            console.log("here is an item: " + item);
             return {
               name: item.track.name,
               artists: item.track.artists,
@@ -99,7 +94,6 @@ export default function CreateApplePlaylist({
           }
         );
         setSpotifyPlaylistTracks(tracks);
-        console.log(tracks);
         // setNewPlaylistArtwork(playlistData.data[0].attributes.artwork);
         // setNewPlaylistName(playlistData.data[0].attributes.name);
         // setNewPlaylistDescription(playlistData.data[0].attributes.description);
