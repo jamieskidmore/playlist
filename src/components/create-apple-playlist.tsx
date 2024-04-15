@@ -192,17 +192,47 @@ export default function CreateApplePlaylist({
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const formatPlaylistName = (playlistName: string) => {
-        return playlistName.toLowerCase().replace(/\s+/g, "-");
-      };
+      // const formatPlaylistName = (playlistName: string) => {
+      //   return playlistName.toLowerCase().replace(/\s+/g, "-");
+      // };
+
+      const createdPlaylist = await response.json();
+
+      const newPlaylistUrl = await getNewPlaylistUrl(createdPlaylist.id);
+      console.log(newPlaylistUrl);
+
+      // const formattedPlaylistName = formatPlaylistName(newPlaylistName);
+      // setNewPlaylistUrl(
+      //   `https://music.apple.com/playlist/${formattedPlaylistName}/${newPlaylist.data[0].id}`
+      // );
+    } catch (error) {
+      console.error("Failed to create playlist:", error);
+    }
+  };
+
+  const getNewPlaylistUrl = async (id: string) => {
+    try {
+      const response = await fetch(
+        `https://api.music.apple.com/v1/catalog/ca/playlists/${id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${appleDeveloperToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
       const newPlaylist = await response.json();
 
-      console.log(newPlaylist);
-      const formattedPlaylistName = formatPlaylistName(newPlaylistName);
-      setNewPlaylistUrl(
-        `https://music.apple.com/playlist/${formattedPlaylistName}/${newPlaylist.data[0].id}`
-      );
+      const url = newPlaylist.data.url;
+      console.log(url);
+
+      return url;
     } catch (error) {
       console.error("Failed to create playlist:", error);
     }
