@@ -140,11 +140,14 @@ export default function CreateApplePlaylist({
         if (searchResponse) {
           const search = await searchResponse.json();
           hrefs.push(search.results.songs.data[0].href);
+          console.log("inside getSongs");
+          console.log(search.results.songs.data[0]);
         } else {
           notFound.push(track.name);
         }
       });
       setSongsNotFound(notFound);
+      console.log(hrefs);
       return hrefs;
     } catch (error) {
       console.log("error", error);
@@ -153,6 +156,7 @@ export default function CreateApplePlaylist({
   };
 
   const createApplePlaylist = (songs: string[]) => {
+    console.log("inside create playlist");
     console.log(songs);
   };
 
