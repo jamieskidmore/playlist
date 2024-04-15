@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import emailjs from "@emailjs/browser";
 
 export default function PlaylistForm({
   message,
@@ -19,6 +20,50 @@ export default function PlaylistForm({
   songsNotFound?: string[];
   newPlaylistUrl?: string;
 }) {
+  const [email, setEmail] = useState("");
+  const [emailSent, setEmailSent] = useState(false);
+
+  const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+
+    // Check if any of the fields are empty
+    let allFieldsFilled = true;
+    formData.forEach((value) => {
+      if (!value) {
+        allFieldsFilled = false;
+      }
+    });
+
+    if (
+      !process.env.NEXT_PUBLIC_SERVICE_ID ||
+      !process.env.NEXT_PUBLIC_TEMPLATE_ID ||
+      !process.env.NEXT_PUBLIC_PUBLIC_KEY
+    ) {
+      return;
+    }
+
+    emailjs
+      .sendForm(
+        process.env.NEXT_PUBLIC_SERVICE_ID,
+        process.env.NEXT_PUBLIC_TEMPLATE_ID,
+        form,
+        {
+          publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
+        }
+      )
+      .then(
+        () => {
+          setEmailSent(true);
+          console.log("SUCCESS!");
+        },
+        (error) => {
+          console.log("FAILED...", error.text);
+        }
+      );
+  };
   return message === "" ? (
     <>
       <div className="text-orange-300 bg-green-700 p-5 text-center text-xl mx-auto">
@@ -29,8 +74,8 @@ export default function PlaylistForm({
           type="text"
           className="text-black text-center bg-transparent border-2 border-black placeholder-black rounded-3xl"
           placeholder="playlist link"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <button type="submit" className="text-6xl font-extrabold text-outline">
           {buttonText}
@@ -51,6 +96,30 @@ export default function PlaylistForm({
       )}
 
       <p className="text-black text-center">{message}</p>
+
+      {!emailSent && (
+        <form onSubmit={sendEmail} className="flex flex-col space-y-5">
+          <input
+            type="text"
+            className="text-black text-center bg-transparent border-2 border-black placeholder-black rounded-3xl"
+            placeholder="email playlist"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+          />
+          <button
+            type="submit"
+            className="text-6xl font-extrabold text-outline"
+          >
+            Send
+          </button>
+          <input
+            type="text"
+            className="hidden"
+            placeholder="email playlist"
+            value={newPlaylistUrl}
+          />
+        </form>
+      )}
 
       {newPlaylistUrl && (
         <a href={newPlaylistUrl}>

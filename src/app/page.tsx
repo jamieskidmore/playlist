@@ -21,7 +21,7 @@ export default function Home() {
           <StarRow colour="text-green-800" />
         </div>
         <div className="flex flex-col items-center space-y-5 mx-auto min-w-40 md:min-w-72">
-          <p className="text-yellow-300 bg-red-700 flex p-5 text-center m-2 text-xl">
+          <p className="text-orange-300 bg-red-700 flex p-5 text-center m-2 text-xl">
             <span>Playlist Converter for Spotify & Apple Music</span>
           </p>
           <Start />
