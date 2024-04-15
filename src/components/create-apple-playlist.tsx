@@ -162,13 +162,10 @@ export default function CreateApplePlaylist({
     console.log("inside create playlist");
     console.log(songs);
 
-    const playlistName = "Your Playlist Name";
-    const playlistDescription = "Your Playlist Description";
-
     const body = {
       attributes: {
-        name: playlistName,
-        description: playlistDescription,
+        name: newPlaylistName,
+        description: newPlaylistDescription,
       },
       relationships: {
         tracks: {
@@ -195,10 +192,15 @@ export default function CreateApplePlaylist({
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
+      const formatPlaylistName = (playlistName: string) => {
+        return playlistName.toLowerCase().replace(/\s+/g, "-");
+      };
+
       const newPlaylist = await response.json();
-      console.log(newPlaylist.data);
-      console.log(newPlaylist.data[0].href);
-      console.log(newPlaylist.data.href);
+      const formattedPlaylistName = formatPlaylistName(newPlaylistName);
+      setNewPlaylistUrl(
+        `https://music.apple.com/playlist/${formattedPlaylistName}/${newPlaylist.data[0].id}`
+      );
     } catch (error) {
       console.error("Failed to create playlist:", error);
     }
