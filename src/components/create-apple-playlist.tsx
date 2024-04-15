@@ -22,6 +22,7 @@ export default function CreateApplePlaylist({
   ]);
   const [inputValue, setInputValue] = useState("");
   const [message, setMessage] = useState("");
+  const [appleUserToken, setAppleUserToken] = useState("");
 
   useEffect(() => {
     localStorage.clear();
@@ -35,8 +36,8 @@ export default function CreateApplePlaylist({
             },
           });
 
-          const appleUserToken = await music.authorize();
-          localStorage.setItem("appleUserToken", appleUserToken);
+          const userToken = await music.authorize();
+          setAppleUserToken(userToken);
           setMessage("User connected with apple!");
         } catch (error) {
           setMessage("MusicKit Authorization Failed.");
@@ -49,6 +50,47 @@ export default function CreateApplePlaylist({
       handleConnectWithApple();
     }
   }, [appleDeveloperToken]);
+
+  useEffect(() => {
+    const createApplePlaylist = async () => {
+      setMessage("Connecting to Apple");
+      try {
+        setMessage(`Creating playlist on Apple Music`);
+
+        const appleTracks: any = [];
+
+        spotifyPlaylistTracks.map(async (tracks: any) => {
+          const queryString = new URLSearchParams({
+            term: `${tracks.name} ${tracks.artists.join(" ")} ${tracks.album}`,
+            types: "songs",
+            limit: "10",
+          }).toString();
+          const playlistResponse = await fetch(
+            `https://api.music.apple.com/v1/catalog/ca/search?${queryString}`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${appleDeveloperToken}`,
+                // "Music-User-Token": appleUserToken,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          appleTracks.push(playlistResponse);
+          console.log(playlistResponse);
+        });
+        console.log(appleTracks);
+
+        setMessage("Playlist created.");
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+
+    if (spotifyPlaylistTracks !== null) {
+      createApplePlaylist();
+    }
+  }, [spotifyPlaylistTracks]);
 
   const getPlaylistFromSpotify = async (e: React.FormEvent) => {
     e.preventDefault();
