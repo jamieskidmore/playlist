@@ -23,6 +23,8 @@ export default function CreateApplePlaylist({
   const [inputValue, setInputValue] = useState("");
   const [message, setMessage] = useState("");
   const [appleUserToken, setAppleUserToken] = useState("");
+  const [appleTrackHrefs, setAppleTrackHrefs] = useState<string[]>([]);
+  const [songsNotFound, setSongsNotFound] = useState<string[]>([]);
 
   useEffect(() => {
     localStorage.clear();
@@ -53,45 +55,7 @@ export default function CreateApplePlaylist({
 
   useEffect(() => {
     const createApplePlaylist = async () => {
-      setMessage("Connecting to Apple");
-      try {
-        setMessage(`Creating playlist on Apple Music`);
-
-        const appleTracks: any = [];
-
-        spotifyPlaylistTracks.map(async (track: any) => {
-          const artistNames = track.artists.map((artist: any) => artist.name);
-
-          const queryString = new URLSearchParams({
-            term: `${track.name} ${artistNames.join(" ")} ${track.album}`,
-            types: "songs",
-            limit: "10",
-          }).toString();
-
-          const searchResponse = await fetch(
-            `https://api.music.apple.com/v1/catalog/ca/search?${queryString}`,
-            {
-              method: "GET",
-              headers: {
-                Authorization: `Bearer ${appleDeveloperToken}`,
-                // "Music-User-Token": appleUserToken,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-
-          if (searchResponse) {
-            const search = await searchResponse.json();
-            console.log(search.results.songs.data[0].href);
-          } else {
-            console.log("Not found: " + track.name);
-          }
-        });
-
-        setMessage("Playlist created.");
-      } catch (error) {
-        console.log("error", error);
-      }
+      getSongsFromApple();
     };
 
     if (spotifyPlaylistTracks !== null) {
@@ -142,26 +106,110 @@ export default function CreateApplePlaylist({
     return `https://api.spotify.com/v1/playlists/${playlistUrl[4]}`;
   };
 
-  return message === "" ? (
-    <div>
-      <p>Connecting to Apple...</p>
-    </div>
+  const getSongsFromApple = () => {
+    const hrefs: string[] = [];
+    const notFound: string[] = [];
+    setMessage("Connecting to Apple");
+    try {
+      setMessage(`Creating playlist on Apple Music`);
+
+      spotifyPlaylistTracks.map(async (track: any) => {
+        setMessage(`Adding song ${track.name}`);
+        const artistNames = track.artists.map((artist: any) => artist.name);
+
+        const queryString = new URLSearchParams({
+          term: `${track.name} ${artistNames.join(" ")} ${track.album}`,
+          types: "songs",
+          limit: "10",
+        }).toString();
+
+        const searchResponse = await fetch(
+          `https://api.music.apple.com/v1/catalog/ca/search?${queryString}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${appleDeveloperToken}`,
+              // "Music-User-Token": appleUserToken,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (searchResponse) {
+          const search = await searchResponse.json();
+          hrefs.push(search.results.songs.data[0].href);
+        } else {
+          notFound.push(track.name);
+        }
+      });
+      setAppleTrackHrefs(hrefs);
+      setSongsNotFound(notFound);
+      setMessage("Playlist created.");
+    } catch (error) {
+      console.log("error", error);
+    }
+    return;
+  };
+
+  // return message === "" ? (
+  //   <div>
+  //     <p>Connecting to Apple...</p>
+  //   </div>
+  // ) : (
+  //   <>
+  //     <div>
+  //       <p>Enter an Spotify playlist link below</p>
+  //       <form onSubmit={async (e) => await getPlaylistFromSpotify(e)}>
+  //         <input
+  //           type="text"
+  //           className="text-black"
+  //           value={inputValue}
+  //           onChange={(e) => setInputValue(e.target.value)}
+  //         />
+  //         <button type="submit" className="bg-white text-black">
+  //           Go
+  //         </button>
+  //       </form>
+  //     </div>
+  //   </>
+  // );
+
+  return message == "" ? (
+    <>
+      <p>Enter a Spotify playlist link below</p>
+      <form onSubmit={async (e) => await getPlaylistFromSpotify(e)}>
+        <input
+          type="text"
+          className="text-black"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
+        <button type="submit" className="bg-white text-black">
+          Go
+        </button>
+      </form>
+    </>
   ) : (
     <>
-      <div>
-        <p>Enter an Spotify playlist link below</p>
-        <form onSubmit={async (e) => await getPlaylistFromSpotify(e)}>
-          <input
-            type="text"
-            className="text-black"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-          />
-          <button type="submit" className="bg-white text-black">
-            Go
-          </button>
-        </form>
-      </div>
+      {message}
+      {/* {newPlaylistUrl && (
+        <a href={newPlaylistUrl}>
+          <button className="bg-white text-black">Link to new Playlist</button>
+        </a>
+      )} */}
+
+      {songsNotFound && songsNotFound.length > 0 && (
+        <div>
+          <p>The following song(s) were not added:</p>
+          <ul>
+            {songsNotFound.map((song, index) => (
+              <li key={index}>{song}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </>
   );
 }
+
+// }
