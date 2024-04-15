@@ -33,7 +33,7 @@ body {
 }
 
 .text-outline {
-  -webkit-text-stroke: 4px rgb(95, 56, 150); /* Adjust the stroke width and color as needed */
-  text-stroke: 2px rgb(95, 56, 150); /* Standard property, but not widely supported yet */
+  -webkit-text-stroke: 4px rgb(95, 57, 150); /* Adjust the stroke width and color as needed */
+  text-stroke: 2px rgb(95, 57, 150); /* Standard property, but not widely supported yet */
   color: transparent; /* Make the text itself transparent */
 }
