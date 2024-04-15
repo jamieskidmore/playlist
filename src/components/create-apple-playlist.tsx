@@ -77,6 +77,7 @@ export default function CreateApplePlaylist({
           headers: { Authorization: `Bearer ${spotifyAccessToken}` },
         });
         const playlistData = await playlistResponse.json();
+        console.log(playlistData);
 
         const tracks = playlistData.tracks.items.map(
           (item: {
@@ -201,29 +202,6 @@ export default function CreateApplePlaylist({
       console.error("Failed to create playlist:", error);
     }
   };
-
-  // return message === "" ? (
-  //   <div>
-  //     <p>Connecting to Apple...</p>
-  //   </div>
-  // ) : (
-  //   <>
-  //     <div>
-  //       <p>Enter an Spotify playlist link below</p>
-  //       <form onSubmit={async (e) => await getPlaylistFromSpotify(e)}>
-  //         <input
-  //           type="text"
-  //           className="text-black"
-  //           value={inputValue}
-  //           onChange={(e) => setInputValue(e.target.value)}
-  //         />
-  //         <button type="submit" className="bg-white text-black">
-  //           Go
-  //         </button>
-  //       </form>
-  //     </div>
-  //   </>
-  // );
 
   return message == "" ? (
     <>
