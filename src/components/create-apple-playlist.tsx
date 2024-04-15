@@ -82,7 +82,7 @@ export default function CreateApplePlaylist({
 
           if (searchResponse) {
             const search = await searchResponse.json();
-            console.log(search.results.songs.data.href);
+            console.log(search.results);
           } else {
             console.log("Not found: " + track.name);
           }
@@ -139,7 +139,6 @@ export default function CreateApplePlaylist({
 
   const formatSpotifyUrlForApi = (spotifyUrl: string): string | null => {
     const playlistUrl = spotifyUrl.split("/");
-    console.log(playlistUrl[4]);
     return `https://api.spotify.com/v1/playlists/${playlistUrl[4]}`;
   };
 
