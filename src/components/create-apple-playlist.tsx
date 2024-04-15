@@ -197,6 +197,8 @@ export default function CreateApplePlaylist({
 
       const newPlaylist = await response.json();
       console.log(newPlaylist.data);
+      console.log(newPlaylist.data[0].href);
+      console.log(newPlaylist.data.href);
     } catch (error) {
       console.error("Failed to create playlist:", error);
     }
